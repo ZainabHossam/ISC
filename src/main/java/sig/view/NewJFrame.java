@@ -4,29 +4,14 @@
  */
 package sig.view;
 
-import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import java.util.ArrayList;
+import javax.swing.*;
 import sig.controllers.HandelActions;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;;  
+import sig.model.InvoiceHeaderTableModel;
+import sig.model.InvoiceHeaders;
+import sig.model.InvoiceLineTableModel;;
+
 
 
 /**
@@ -39,6 +24,7 @@ public class NewJFrame extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public NewJFrame() {
+        HandelAction = new HandelActions(this);
         initComponents();
     }
 
@@ -76,6 +62,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         InvoiceTable = new javax.swing.JTable();
+        InvoiceTable.getSelectionModel().addListSelectionListener(HandelActions);
         CancelBtn = new javax.swing.JButton();
         CancelBtn.addActionListener(HandelAction);
         SaveBtn = new javax.swing.JButton();
@@ -135,13 +122,10 @@ public class NewJFrame extends javax.swing.JFrame {
 
         InvoiceTableDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         InvoiceTableDetails.setShowGrid(true);
@@ -175,16 +159,12 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jLabel6.setText("Invoice Items");
-
         InvoiceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         InvoiceTable.setShowGrid(true);
@@ -364,57 +344,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void LoadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadFileActionPerformed
         // TODO add your handling code here:
-        File file;
-        FileInputStream excelF = null;
-        BufferedInputStream excelB = null;
 
-        JFileChooser File = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        File.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        File.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "CSV"));
-        File.setAcceptAllFileFilterUsed(false);
-        int excelChooser = File.showOpenDialog(null);
-
-       // XSSFWorkbook excelJTableImport= new XSSFWorkbook();
-        if (excelChooser == JFileChooser.APPROVE_OPTION) {
-            try {
-                file = File.getSelectedFile();
-                excelF = new FileInputStream(file);
-                excelB = new BufferedInputStream(excelF);
-                if (file.canRead()) {
-                    XSSFWorkbook wb = new XSSFWorkbook(excelF);
-                    XSSFSheet sheet=wb.getSheetAt(0);
-                    FormulaEvaluator formulaEvaluator=wb.getCreationHelper().createFormulaEvaluator();
-                    for(Row row: sheet)     //iteration over row using for each loop
-                    {
-                        for (Cell cell : row)    //iteration over cell using for each loop
-                        {
-
-                            System.out.println();
-                        }
-
-                    }
-        } else {
-                    System.out.println("File Not Supported");
-                }
-      /*  XSSFWorkbook excelJTableImport = new XSSFWorkbook(excelB);
-                XSSFSheet excelSheet = excelJTableImport.getSheetAt(0);
-
-                for (int Col = 0; Col < excelRow.getLastCellNum(); Col++) {
-                    XSSRow excelRow = excelSheet.getRow(0);
-                    XSSFCell excelCell = excelRow.getCell(Col);
-                    InvoiceTable.add(LoadFile);
-                    System.out.println(excelCell.getStringCellValue());
-
-
-
-            }*/
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }//GEN-LAST:event_LoadFileActionPerformed
     }
     private void SaveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveFileActionPerformed
         // TODO add your handling code here:
@@ -485,6 +415,36 @@ public class NewJFrame extends javax.swing.JFrame {
             private java.awt.Menu menu1;
             private java.awt.Menu menu2;
             private java.awt.MenuBar menuBar1;
-            // End of variables declaration//GEN-END:variables
-            private HandelActions HandelAction = new HandelActions();
+            private InvoiceHeaderTableModel headerTableModel;
+            private InvoiceLineTableModel LineTableModel;
+            private InvoiceHeaders HandelActions;
+    public HandelActions getHandelAction() {
+        return HandelAction;
+    }
+
+
+
+    public ArrayList<InvoiceHeaders> getInvoiceHeadersList() {
+        return InvoiceHeadersList;
+    }
+
+    public void setInvoiceHeadersList(ArrayList<InvoiceHeaders> invoiceHeadersList) {
+        this.InvoiceHeadersList = invoiceHeadersList;
+        headerTableModel=new InvoiceHeaderTableModel(invoiceHeadersList);
+        this.InvoiceTable.setModel(headerTableModel);
+
+    }
+
+    // End of variables declaration//GEN-END:variables
+            public HandelActions HandelAction;
+
+    public JTable getInvoiceTable() {
+        return InvoiceTable;
+    }
+
+    public JTable getInvoiceTableDetails() {
+        return InvoiceTableDetails;
+    }
+
+    private ArrayList<InvoiceHeaders> InvoiceHeadersList;
         }
