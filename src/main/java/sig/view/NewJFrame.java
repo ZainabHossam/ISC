@@ -10,7 +10,8 @@ import javax.swing.*;
 import sig.controllers.HandelActions;
 import sig.model.InvoiceHeaderTableModel;
 import sig.model.InvoiceHeaders;
-import sig.model.InvoiceLineTableModel;;
+import sig.model.InvoiceLineTableModel;
+
 
 
 
@@ -62,7 +63,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         InvoiceTable = new javax.swing.JTable();
-        InvoiceTable.getSelectionModel().addListSelectionListener(HandelActions);
+        InvoiceTable.getSelectionModel().addListSelectionListener(HandelAction);
         CancelBtn = new javax.swing.JButton();
         CancelBtn.addActionListener(HandelAction);
         SaveBtn = new javax.swing.JButton();
@@ -145,7 +146,7 @@ public class NewJFrame extends javax.swing.JFrame {
         InvoiceNumberValue.setText(" ");
         InvoiceNumberValue.setEnabled(false);
 
-        InvoiceDate.setText("Invoice Data");
+        InvoiceDate.setText("Invoice Date");
 
         CustomerName.setText("Customer Name");
 
@@ -385,9 +386,29 @@ public class NewJFrame extends javax.swing.JFrame {
                 });
             }
 
-            // Variables declaration - do not modify//GEN-BEGIN:variables
+    public void setInvoiceNumberValue(String invoiceNumberValue) {
+        InvoiceNumberValue.setText(invoiceNumberValue) ;
+    }
+
+    public void setInvoiceDataValue(String invoiceDataValue) {
+        InvoiceDataValue.setText(invoiceDataValue);
+    }
+
+    public void setCustomerNameValue(String customerNameValue) {
+        CustomerNameValue.setText(customerNameValue);
+    }
+
+    public void setInvoiceTotalValue(double invoiceTotalValue) {
+        InvoiceTotalValue.setText(String.valueOf(invoiceTotalValue));
+    }
+
+    public void setInvoiceDate(){
+
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
             private javax.swing.JButton CancelBtn;
-            private javax.swing.JButton CreateNewInvoiceBtn;
+            public javax.swing.JButton CreateNewInvoiceBtn;
             private javax.swing.JLabel CustomerName;
             private javax.swing.JTextField CustomerNameValue;
             private javax.swing.JButton DeleteInvoiceBtn;
@@ -397,7 +418,7 @@ public class NewJFrame extends javax.swing.JFrame {
             private javax.swing.JLabel InvoiceDate;
             private javax.swing.JTextField InvoiceNumberValue;
             private javax.swing.JTable InvoiceTable;
-            private javax.swing.JTable InvoiceTableDetails;
+    private javax.swing.JTable InvoiceTableDetails;
             private javax.swing.JLabel InvoiceTotal;
             private javax.swing.JTextField InvoiceTotalValue;
             private javax.swing.JMenuItem LoadFile;

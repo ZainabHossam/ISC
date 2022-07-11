@@ -95,15 +95,21 @@ public HandelActions(NewJFrame frame){
     }
 
     private void SaveInvoice() {
+
     }
 
     @Override
     public void valueChanged(ListSelectionEvent event){
-        System.out.println("Row Selected");
+        //System.out.println(Row Selected);
         int selectedRow = frame.getInvoiceTable().getSelectedRow();
         System.out.println(selectedRow);
         ArrayList<InvoiceLine> lines=frame.getInvoiceHeadersList().get(selectedRow).getItemDetails();
         frame.getInvoiceTableDetails().setModel(new InvoiceLineTableModel(lines));
+       System.out.println("The invoice Number is:"+frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo());
+        frame.setInvoiceNumberValue(String.valueOf(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo()));
+        frame.setInvoiceDataValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceDate());
+        frame.setCustomerNameValue(frame.getInvoiceHeadersList().get(selectedRow).getCustomerName());
+        frame.setInvoiceTotalValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceTotal());
     }
 
     private void LoadFile() throws FileNotFoundException, IOException {

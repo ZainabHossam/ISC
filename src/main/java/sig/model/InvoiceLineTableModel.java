@@ -23,7 +23,7 @@ private String []cols={"Item Name","Unit Price","Count"};
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        InvoiceLine line=data.get(columnIndex);
+        InvoiceLine line=data.get(rowIndex);
         switch (columnIndex){
             case 0:
                 return line.getItemName();
