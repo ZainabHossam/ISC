@@ -88,6 +88,7 @@ public HandelActions(NewJFrame frame){
     }
 
     private void newInvoice() {
+
         
     }
 
