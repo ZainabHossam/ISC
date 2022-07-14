@@ -73,7 +73,7 @@ public class NewJFrame extends javax.swing.JFrame {
         LoadFile = new javax.swing.JMenuItem();
         LoadFile.addActionListener(HandelAction);
         SaveFile = new javax.swing.JMenuItem();
-        SaveBtn.addActionListener(HandelAction);
+        SaveFile.addActionListener(HandelAction);
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -171,7 +171,7 @@ public class NewJFrame extends javax.swing.JFrame {
         InvoiceTable.setShowGrid(true);
         jScrollPane2.setViewportView(InvoiceTable);
 
-        CancelBtn.setText("Cancel");
+        CancelBtn.setText("Delete Line");
         CancelBtn.setActionCommand("Cancel");
         CancelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,7 +179,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        SaveBtn.setText("Save");
+        SaveBtn.setText("Create New Line");
         SaveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SaveBtnActionPerformed(evt);
@@ -203,12 +203,15 @@ public class NewJFrame extends javax.swing.JFrame {
         FileMenu.add(LoadFile);
 
         SaveFile.setText("Save File");
+
+        SaveFile.setActionCommand("Save File");
         SaveFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SaveFileActionPerformed(evt);
             }
         });
         FileMenu.add(SaveFile);
+
 
         jMenuBar2.add(FileMenu);
 

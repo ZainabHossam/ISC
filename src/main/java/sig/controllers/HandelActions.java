@@ -1,22 +1,24 @@
 
 package sig.controllers;
 
+import sig.model.InvoiceHeaderTableModel;
 import sig.model.InvoiceHeaders;
 import sig.model.InvoiceLine;
 import sig.model.InvoiceLineTableModel;
+import sig.view.CreateNewInvoiceLine;
 import sig.view.NewJFrame;
+import sig.view.OtherDialog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,7 +60,9 @@ public HandelActions(NewJFrame frame){
                 
             case "Save File":
             {
+                System.out.println("SaveFile");
             try {
+                System.out.println("SaveFile");
                 SaveFile();
             } catch (IOException ex) {
                 Logger.getLogger(HandelActions.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,8 +70,6 @@ public HandelActions(NewJFrame frame){
             }
                 break;
 
-
-                
             case "Create New Invoice":
                 newInvoice();
                 break;
@@ -75,48 +77,133 @@ public HandelActions(NewJFrame frame){
             case "Delete Invoice":
                 DelInvoice();
                 break;
-            case "Save":
-                SaveInvoice();
+            case "Create New Line":
+                AddNewLine();
                 break;
                 
-            case "Cacel":
-                CancelChanges();
+            case "Cancel":
+                DeleteLine();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + Clicked.getActionCommand());
         }
     }
 
-    private void newInvoice() {
 
-        
-    }
+    ArrayList<InvoiceHeaders> InvoHeaderArray= new ArrayList<>();
+    ArrayList<InvoiceLine> lines=new ArrayList<>();
+
+
+
+    private void newInvoice() {
+                InvoiceHeaderTableModel model = new InvoiceHeaderTableModel(InvoHeaderArray);
+                System.out.println(model.getRowCount());
+                try {
+                    System.out.println("newInvoice Visited");
+                    OtherDialog dialog = new OtherDialog(new javax.swing.JFrame(), true);
+                    dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.setVisible(true);
+                    System.out.println("CustFrom Handel" + dialog.getCustName());
+                    if(dialog.getInvoNo()==0||dialog.getInvoDate()==""||dialog.getCustName()=="") {
+                        System.out.println("Fields are Empty");
+                    }else{
+                        System.out.println("In Condition");
+                        InvoiceHeaders invoHeader2 = new InvoiceHeaders(dialog.getInvoNo(), dialog.getInvoDate(), dialog.getCustName());
+                        InvoHeaderArray.add(invoHeader2);
+                        InvoiceHeaderTableModel model2 = new InvoiceHeaderTableModel(InvoHeaderArray);
+                        System.out.println(model.getRowCount());
+                        frame.setInvoiceHeadersList(InvoHeaderArray);
+
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+
 
     private void DelInvoice() {
+        int selectedRow = frame.getInvoiceTable().getSelectedRow();
+        if(selectedRow>=0) {
+            System.out.println("The Selected row is:" + selectedRow);
+            InvoHeaderArray.remove(selectedRow);
+            frame.getInvoiceTable().addNotify();
+
+        }
+        else{
+            System.out.println("No Data to Delete");
+        }
+//    private void ClearInvoDetails(){
+//
+//        }
+//
     }
 
-    private void SaveInvoice() {
+    private void AddNewLine() {
+       // InvoiceLineTableModel model = new InvoiceLineTableModel(lines);
+        //InvoiceHeaderTableModel model2 = new InvoiceHeaderTableModel(InvoHeaderArray);
+        int selectedRow = frame.getInvoiceTable().getSelectedRow();
+      //  System.out.println(model.getRowCount());
+        try {
+            System.out.println("newLine Visited");
+            CreateNewInvoiceLine dialog = new CreateNewInvoiceLine(new javax.swing.JFrame(), true);
+            dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+          InvoiceHeaders mInvHeader =  InvoHeaderArray.get(selectedRow);
+         // InvoiceLine x = (InvoiceLine)
+        System.out.println("Item name" + dialog.getItemName());
+            if(dialog.getItemName()==""||dialog.getItemCounts()==0||dialog.getItemCounts()==0) {
+                System.out.println("Fields are Empty");
+            }else{
+                System.out.println("In SaveLine Condition");
 
+             InvoiceLine invoLine2 = new InvoiceLine(mInvHeader,dialog.getItemName(), dialog.getUnitPrice(), dialog.getItemCounts());
+                lines.add(invoLine2);
+                frame.getInvoiceTableDetails().addNotify();
+
+               // InvoiceLineTableModel model3= new InvoiceLineTableModel(lines);
+               // System.out.println(model.getRowCount());
+               // frame.(lines);
+
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
+
+
+//    private void ClearInvoDetails(){
+//    frame.getInvoiceTableDetails().selectAll();
+//    frame.getInvoiceTableDetails().removeRowSelectionInterval(0,InvoHeaderArray.size()-1);
+//    }
 
     @Override
     public void valueChanged(ListSelectionEvent event){
         //System.out.println(Row Selected);
         int selectedRow = frame.getInvoiceTable().getSelectedRow();
         System.out.println(selectedRow);
-        ArrayList<InvoiceLine> lines=frame.getInvoiceHeadersList().get(selectedRow).getItemDetails();
-        frame.getInvoiceTableDetails().setModel(new InvoiceLineTableModel(lines));
-       System.out.println("The invoice Number is:"+frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo());
-        frame.setInvoiceNumberValue(String.valueOf(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo()));
-        frame.setInvoiceDataValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceDate());
-        frame.setCustomerNameValue(frame.getInvoiceHeadersList().get(selectedRow).getCustomerName());
-        frame.setInvoiceTotalValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceTotal());
+        try {
+    //    ArrayList<InvoiceLine> lines=frame.getInvoiceHeadersList().get(selectedRow).getItemDetails();
+            lines=frame.getInvoiceHeadersList().get(selectedRow).getItemDetails();
+            frame.getInvoiceTableDetails().setModel(new InvoiceLineTableModel(lines));
+            System.out.println("The invoice Number is:"+frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo());
+            frame.setInvoiceNumberValue(String.valueOf(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceNo()));
+            frame.setInvoiceDataValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceDate());
+            frame.setCustomerNameValue(frame.getInvoiceHeadersList().get(selectedRow).getCustomerName());
+            frame.setInvoiceTotalValue(frame.getInvoiceHeadersList().get(selectedRow).getInvoiceTotal());
+        } catch (Exception e) {
+            e.printStackTrace(); //optional for seeing the error message
+        }
     }
+
 
     private void LoadFile() throws FileNotFoundException, IOException {
         try {
         JFileChooser File;
-        ArrayList<InvoiceHeaders> InvoHeaderArray;
+       // ArrayList<InvoiceHeaders> InvoHeaderArray;
         File = new JFileChooser();
         File.setFileSelectionMode(JFileChooser.FILES_ONLY);
         File.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "CSV"));
@@ -163,6 +250,9 @@ public HandelActions(NewJFrame frame){
 
                 }
                 frame.setInvoiceHeadersList(InvoHeaderArray);
+                InvoiceHeaderTableModel model= new InvoiceHeaderTableModel(InvoHeaderArray);
+                //   JTable table= new JTable(model);
+                System.out.println(model.getRowCount());
 
             }
 
@@ -175,9 +265,53 @@ public HandelActions(NewJFrame frame){
    
 
     private void SaveFile() throws FileNotFoundException, IOException {
-     
-               
-    }
+    System.out.println("Save IN");
+        JFileChooser fs=new JFileChooser(new File("c:\\Desktop"))  ;
+           fs.setDialogTitle("Sava a file ");
+//           fs.setFileFilter(new FileFilter() {
+//               @Override
+//               public boolean accept(File f) {
+//                   if (f.getName().endsWith(".csv")) {
+//                       return true;
+//                   }
+//                   return false;
+//               }
+//
+//
+//
+//               @Override
+//               public String getDescription() {
+//                   return ".csv";
+//               }
+//           });
+           fs.showSaveDialog(null);
+        int returnVal = fs.showSaveDialog(this);
+        if(returnVal==JFileChooser.APPROVE_OPTION){
+            //String content = textContent.getText();
+           File path=fs.getSelectedFile();
+           try{
+            FileWriter fw =new FileWriter(path.getPath());
+               FileOutputStream fos =new FileOutputStream(path);
+               for(int row=0; row<InvoHeaderArray.size();row++) {
+                   fw.write(String.valueOf("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]" ));
+                   fw.write("\n");
+                   // System.out.println("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]");
+                   for (int i = 0; i < lines.size(); i++) {
+                       System.out.println("Item Name:   " +lines.get(i).getItemName() + " ,Item Count:   " + lines.get(i).getItemCount() + " ,Item Price:   " + lines.get(i).getItemPrice() + " ,Item Total:    " + lines.get(i).getItemTotal() + "}");
+                       System.out.println("");
+                       fw.write("{ Item Name:   " + lines.get(i).getItemName() +"\n" +" ,Item Count:   " + lines.get(i).getItemCount() + "\n" +" ,Item Price:   " + lines.get(i).getItemPrice() + "\n" +" ,Item Total:   " + lines.get(i).getItemTotal() + "}");
+                       fw.write("\n");
+                   }
+
+               }
+
+
+            fw.flush();
+            fw.close();
+           }catch(Exception e2){
+               //JOptionPane.showMessageDialog();
+           }
+    }}
 //search in invoice array
     private InvoiceHeaders getInvoiceHeaderByInvoiceNo(ArrayList<InvoiceHeaders>Invoices,int invoiceNo){
     for (InvoiceHeaders InvoiceNo: Invoices){
@@ -188,8 +322,19 @@ public HandelActions(NewJFrame frame){
             return null;
     }
 
-    private void CancelChanges() {
-      
+    private void DeleteLine() {
+        int selectedRow = frame.getInvoiceTableDetails().getSelectedRow();
+        if(selectedRow>=0) {
+            System.out.println("The Selected row is:" + selectedRow);
+            lines.remove(selectedRow);
+            frame.getInvoiceTableDetails().addNotify();
+            // frame.getInvoiceTable().clearSelection();
+
+        }
+        else{
+            System.out.println("No Data to Delete");
+        }
+        //   ClearInvoDetails();
     }
     
 }
