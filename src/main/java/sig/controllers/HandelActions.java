@@ -134,10 +134,7 @@ public HandelActions(NewJFrame frame){
         else{
             System.out.println("No Data to Delete");
         }
-//    private void ClearInvoDetails(){
-//
-//        }
-//
+
     }
 
     private void AddNewLine() {
@@ -163,22 +160,11 @@ public HandelActions(NewJFrame frame){
                 lines.add(invoLine2);
                 frame.getInvoiceTableDetails().addNotify();
 
-               // InvoiceLineTableModel model3= new InvoiceLineTableModel(lines);
-               // System.out.println(model.getRowCount());
-               // frame.(lines);
-
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
-
-//    private void ClearInvoDetails(){
-//    frame.getInvoiceTableDetails().selectAll();
-//    frame.getInvoiceTableDetails().removeRowSelectionInterval(0,InvoHeaderArray.size()-1);
-//    }
 
     @Override
     public void valueChanged(ListSelectionEvent event){
@@ -268,22 +254,6 @@ public HandelActions(NewJFrame frame){
     System.out.println("Save IN");
         JFileChooser fs=new JFileChooser(new File("c:\\Desktop"))  ;
            fs.setDialogTitle("Sava a file ");
-//           fs.setFileFilter(new FileFilter() {
-//               @Override
-//               public boolean accept(File f) {
-//                   if (f.getName().endsWith(".csv")) {
-//                       return true;
-//                   }
-//                   return false;
-//               }
-//
-//
-//
-//               @Override
-//               public String getDescription() {
-//                   return ".csv";
-//               }
-//           });
            fs.showSaveDialog(null);
         int returnVal = fs.showSaveDialog(this);
         if(returnVal==JFileChooser.APPROVE_OPTION){
@@ -296,15 +266,14 @@ public HandelActions(NewJFrame frame){
                    fw.write(String.valueOf("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]" ));
                    fw.write("\n");
                    // System.out.println("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]");
-                   for (int i = 0; i < lines.size(); i++) {
-                       System.out.println("Item Name:   " +lines.get(i).getItemName() + " ,Item Count:   " + lines.get(i).getItemCount() + " ,Item Price:   " + lines.get(i).getItemPrice() + " ,Item Total:    " + lines.get(i).getItemTotal() + "}");
+
+                       System.out.println("" + InvoHeaderArray.get(row).getItemDetails());
                        System.out.println("");
-                       fw.write("{ Item Name:   " + lines.get(i).getItemName() +"\n" +" ,Item Count:   " + lines.get(i).getItemCount() + "\n" +" ,Item Price:   " + lines.get(i).getItemPrice() + "\n" +" ,Item Total:   " + lines.get(i).getItemTotal() + "}");
+                       fw.write("" +  InvoHeaderArray.get(row).getItemDetails());
+
+                    //   fw.write("{ Item Name:   " + lines.get(i).getItemName() +"\n" +" ,Item Count:   " + lines.get(i).getItemCount() + "\n" +" ,Item Price:   " + lines.get(i).getItemPrice() + "\n" +" ,Item Total:   " + lines.get(i).getItemTotal() + "}");
                        fw.write("\n");
                    }
-
-               }
-
 
             fw.flush();
             fw.close();

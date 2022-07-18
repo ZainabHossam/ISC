@@ -61,11 +61,11 @@ public class InvoiceLine {
     @Override
     public String toString() {
         return "InvoiceLine{" +
-                "InvoiceNo=" + InvoiceNo  +
-                ", ItemName='" + ItemName + '\'' +
-                ", ItemPrice=" + ItemPrice +
-                ", ItemCount=" + ItemCount +
-                ", ItemTotal=" + getItemTotal() +
-                '}';
+              /*  "InvoiceNo=" + InvoiceNo +
+                ",*/" Item Name='" + ItemName + '\'' +
+                ", Item Price=" + ItemPrice +
+                ", Item Count=" + ItemCount +
+                ", Item Total=" + getItemTotal() +
+                '}'+"\n";
     }
 }
