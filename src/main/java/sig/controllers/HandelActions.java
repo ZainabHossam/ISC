@@ -253,7 +253,7 @@ public HandelActions(NewJFrame frame){
     private void SaveFile() throws FileNotFoundException, IOException {
     System.out.println("Save IN");
         JFileChooser fs=new JFileChooser(new File("c:\\Desktop"))  ;
-           fs.setDialogTitle("Sava a file ");
+           fs.setDialogTitle("Sava a Invoice Header File ");
            fs.showSaveDialog(null);
         int returnVal = fs.showSaveDialog(this);
         if(returnVal==JFileChooser.APPROVE_OPTION){
@@ -269,7 +269,7 @@ public HandelActions(NewJFrame frame){
 
                        System.out.println("" + InvoHeaderArray.get(row).getItemDetails());
                        System.out.println("");
-                       fw.write("" +  InvoHeaderArray.get(row).getItemDetails());
+                  //     fw.write("" +  InvoHeaderArray.get(row).getItemDetails());
 
                     //   fw.write("{ Item Name:   " + lines.get(i).getItemName() +"\n" +" ,Item Count:   " + lines.get(i).getItemCount() + "\n" +" ,Item Price:   " + lines.get(i).getItemPrice() + "\n" +" ,Item Total:   " + lines.get(i).getItemTotal() + "}");
                        fw.write("\n");
@@ -280,6 +280,33 @@ public HandelActions(NewJFrame frame){
            }catch(Exception e2){
                //JOptionPane.showMessageDialog();
            }
+            JFileChooser fs2=new JFileChooser(new File("c:\\Desktop"))  ;
+            fs2.setDialogTitle("Sava a Invoice Lines File ");
+            fs2.showSaveDialog(null);
+            int returnVal2 = fs2.showSaveDialog(this);
+            if(returnVal2==JFileChooser.APPROVE_OPTION){
+                //String content = textContent.getText();
+                File path2=fs2.getSelectedFile();
+                try{
+                    FileWriter fw2 =new FileWriter(path2.getPath());
+                    FileOutputStream fos =new FileOutputStream(path2);
+                    for(int row=0; row<InvoHeaderArray.size();row++) {
+                       // fw2.write(String.valueOf("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]" ));
+                        fw2.write("\n");
+                        // System.out.println("[" + InvoHeaderArray.get(row).getInvoiceNo() + " ," + InvoHeaderArray.get(row).getCustomerName() + " ," + InvoHeaderArray.get(row).getInvoiceDate() + "]");
+
+                        System.out.println("" + InvoHeaderArray.get(row).getItemDetails());
+                        System.out.println("");
+                        fw2.write("Items of Invoice No: " +InvoHeaderArray.get(row).getInvoiceNo()+"\n"+  InvoHeaderArray.get(row).getItemDetails());
+
+                        //   fw.write("{ Item Name:   " + lines.get(i).getItemName() +"\n" +" ,Item Count:   " + lines.get(i).getItemCount() + "\n" +" ,Item Price:   " + lines.get(i).getItemPrice() + "\n" +" ,Item Total:   " + lines.get(i).getItemTotal() + "}");
+                        fw2.write("\n");
+                    }
+                    fw2.flush();
+                    fw2.close();
+                }catch(Exception e2){
+                    //JOptionPane.showMessageDialog();
+                }}
     }}
 //search in invoice array
     private InvoiceHeaders getInvoiceHeaderByInvoiceNo(ArrayList<InvoiceHeaders>Invoices,int invoiceNo){
